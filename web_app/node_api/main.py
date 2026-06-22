@@ -79,4 +79,5 @@ def delete_job(job_id: int):
 
 if __name__ == "__main__":
     print("[SYSTEM] Python FastAPI (CRUD) đang chạy tại port 3000")
-    uvicorn.run("main:app", host="0.0.0.0", port=3000, reload=True)
+    uvicorn.run("main:app", host="0.0.0.0", port=3000, reload=False)
+
