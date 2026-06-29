@@ -1,0 +1,27 @@
+name: CI/CD Pipeline - Infrastructure (LGTM & Nginx)
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'web_app/docker-compose.yml'
+      - 'web_app/nginx/**'
+      - 'web_app/observability/**'
+      - 'web_app/prometheus.yml'
+
+jobs:
+  deploy-infra:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to Instance 1 via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.INSTANCE1_IP }}
+          username: ubuntu
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd ~/devOps_in_t1/web_app
+            git pull origin main
+            docker-compose down
+            docker-compose up -d --build
