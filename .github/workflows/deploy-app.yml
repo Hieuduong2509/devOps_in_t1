@@ -24,6 +24,24 @@ jobs:
         run: |
           flake8 main.py --count --select=E9,F63,F7,F82 --show-source --statistics
           flake8 main.py --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+      - name: Quét lỗ hổng bảo mật thư viện (Dependencies Check)
+        working-directory: ./web_app/node_api
+        run: |
+          pip install pip-audit
+          pip-audit -r requirements.txt || true
+          # (Tạm thời dùng '|| true' để hệ thống chỉ cảnh báo chứ không chặn đứng nếu có thư viện cũ. Khi nào code ổn định bạn có thể bỏ '|| true' đi)
+
+      - name: Kiểm tra cú pháp toàn bộ file YAML
+        run: |
+          pip install yamllint
+          # Tạo một file cấu hình nhẹ để Yamllint không bắt bẻ những lỗi quá nhỏ (như bắt buộc phải có --- ở đầu file)
+          echo -e "extends: default\nrules:\n  line-length: disable\n  document-start: disable\n  truthy: disable" > .yamllint
+          yamllint .
+
+      - name: Kiểm tra tối ưu Dockerfile (Hadolint)
+        uses: hadolint/hadolint-action@v3.1.0
+        with:
+          dockerfile: ./web_app/node_api/Dockerfile
 
   build-and-deploy:
     needs: ci-lint
