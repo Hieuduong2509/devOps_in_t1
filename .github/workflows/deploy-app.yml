@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - main
-    paths:
-      - 'web_app/node_api/**'
-      - 'web_app/api-deploy.yaml'
-
 jobs:
   ci-lint:
     runs-on: ubuntu-latest
