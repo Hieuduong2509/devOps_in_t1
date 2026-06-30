@@ -68,7 +68,7 @@ jobs:
           severity: 'CRITICAL,HIGH'
 
   codeql-analysis:
-    name: Quét mã nguồn bằng CodeQL
+    name: CodeQL
     runs-on: ubuntu-latest
     permissions:
       security-events: write 
