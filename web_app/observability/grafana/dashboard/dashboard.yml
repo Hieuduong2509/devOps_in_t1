@@ -1,0 +1,11 @@
+apiVersion: 1
+
+providers:
+  - name: 'Default Dashboards'
+    orgId: 1
+    folder: ''
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10 # Cứ 10s Grafana sẽ quét thư mục này xem có file JSON mới không
+    options:
+      path: /etc/grafana/provisioning/dashboards

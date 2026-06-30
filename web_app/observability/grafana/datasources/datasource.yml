@@ -1,0 +1,41 @@
+apiVersion: 1
+
+datasources:
+  # 1. Cấu hình Prometheus (Đo lường Metrics)
+  - name: Prometheus
+    type: prometheus
+    uid: prometheus
+    access: proxy
+    url: http://prometheus:9090
+    isDefault: true
+    editable: false
+
+  # 2. Cấu hình Loki (Thu thập Logs)
+  - name: Loki
+    type: loki
+    uid: loki
+    access: proxy
+    url: http://loki:3100
+    editable: false
+    jsonData:
+      # Liên kết Log với Trace: Tự động tìm chuỗi trace_id trong log để tạo nút bấm sang Tempo
+      derivedFields:
+        - datasourceUid: tempo
+          matcherRegex: "trace_id=(\\w+)"
+          name: TraceID
+          url: '$${__value.raw}'
+
+  # 3. Cấu hình Tempo (Theo dõi dấu vết Traces)
+  - name: Tempo
+    type: tempo
+    uid: tempo
+    access: proxy
+    url: http://tempo:3200
+    editable: false
+    jsonData:
+      nodeGraph:
+        enabled: true
+      # Liên kết Trace ngược lại Log: Bấm vào 1 Span, nhảy sang Loki tìm log của Span đó
+      tracesToLogsV2:
+        datasourceUid: loki
+        tags: [{ key: 'service.name', value: 'app' }]
