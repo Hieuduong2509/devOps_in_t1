@@ -40,6 +40,17 @@ jobs:
         with:
           dockerfile: ./web_app/node_api/Dockerfile
 
+      - name: Cài đặt thư viện cho Unit Test
+        working-directory: ./web_app/node_api
+        run: |
+          pip install -r requirements.txt
+          pip install pytest httpx
+
+      - name: Chạy Unit Test
+        working-directory: ./web_app/node_api
+        run: |
+          pytest test_main.py -v
+
   build-and-deploy:
     needs: ci-lint
     runs-on: ubuntu-latest
