@@ -63,8 +63,6 @@ services:
       - GF_SERVER_DOMAIN=devoops.shop
       - GF_SERVER_ROOT_URL=https://devoops.shop/grafana/
       - GF_SERVER_SERVE_FROM_SUB_PATH=true
-    ports:
-      - "3000:3000"
     volumes:
       - ./observability/grafana/datasources:/etc/grafana/provisioning/datasources
       - ./observability/grafana/dashboards:/etc/grafana/provisioning/dashboards
