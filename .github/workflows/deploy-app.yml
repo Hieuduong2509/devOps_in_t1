@@ -50,6 +50,20 @@ jobs:
         working-directory: ./web_app/node_api
         run: |
           pytest test_main.py -v
+      
+      - name: Build nháp Docker Image
+        working-directory: ./web_app/node_api
+        run: |
+          docker build -t fastapi-app:latest .
+
+      - name: Kiểm tra Docker Image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: fastapi-app:latest
+          format: table
+          exit-code: '1'
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH,MEDIUM'
 
   build-and-deploy:
     needs: ci-lint
