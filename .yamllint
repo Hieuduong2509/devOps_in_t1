@@ -1,0 +1,11 @@
+extends: default
+
+rules:
+  line-length: disable      # Bỏ qua lỗi dòng quá dài
+  document-start: disable   # Bỏ qua lỗi thiếu --- ở đầu file
+  truthy: disable           # Bỏ qua lỗi kiểm tra true/false
+  trailing-spaces: disable  # Bỏ qua lỗi dư khoảng trắng ở cuối dòng
+  brackets: disable         # Bỏ qua lỗi dư khoảng trắng bên trong ngoặc []
+  comments: disable         # Bỏ qua lỗi thiếu dấu cách trước dấu #
+  new-line-at-end-of-file: disable # Bỏ qua lỗi thiếu dòng trống ở cuối file
+  indentation: disable
