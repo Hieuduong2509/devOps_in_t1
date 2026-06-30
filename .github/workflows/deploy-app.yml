@@ -67,8 +67,25 @@ jobs:
           vuln-type: 'os,library'
           severity: 'CRITICAL,HIGH'
 
+  codeql-analysis:
+    name: Quét mã nguồn bằng CodeQL
+    runs-on: ubuntu-latest
+    permissions:
+      security-events: write 
+    steps:
+      - name: Kéo code về máy chủ
+        uses: actions/checkout@v3
+
+      - name: Khởi tạo CodeQL cho Python
+        uses: github/codeql-action/init@v3
+        with:
+          languages: 'python'
+
+      - name: Tiến hành phân tích luồng dữ liệu
+        uses: github/codeql-action/analyze@v3
+
   build-and-deploy:
-    needs: ci-lint
+    needs: [ci-lint, codeql-analysis]
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
