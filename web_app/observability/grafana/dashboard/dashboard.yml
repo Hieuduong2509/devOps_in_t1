@@ -6,6 +6,6 @@ providers:
     folder: ''
     type: file
     disableDeletion: false
-    updateIntervalSeconds: 10 # Cứ 10s Grafana sẽ quét thư mục này xem có file JSON mới không
+    updateIntervalSeconds: 10 
     options:
       path: /etc/grafana/provisioning/dashboards
