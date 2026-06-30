@@ -29,13 +29,10 @@ jobs:
         run: |
           pip install pip-audit
           pip-audit -r requirements.txt || true
-          # (Tạm thời dùng '|| true' để hệ thống chỉ cảnh báo chứ không chặn đứng nếu có thư viện cũ. Khi nào code ổn định bạn có thể bỏ '|| true' đi)
 
       - name: Kiểm tra cú pháp toàn bộ file YAML
         run: |
           pip install yamllint
-          # Tạo một file cấu hình nhẹ để Yamllint không bắt bẻ những lỗi quá nhỏ (như bắt buộc phải có --- ở đầu file)
-          echo -e "extends: default\nrules:\n  line-length: disable\n  document-start: disable\n  truthy: disable" > .yamllint
           yamllint .
 
       - name: Kiểm tra tối ưu Dockerfile (Hadolint)
