@@ -1,0 +1,15 @@
+---
+apiVersion: 1
+
+contactPoints:
+  - orgId: 1
+    name: DiscordAlerts
+    receivers:
+      - uid: discord_receiver_1
+        type: discord
+        settings:
+          url: "https://discord.com/api/webhooks/1518837293379489857/1Ud1mLEEFp3ppWo9JCE5RNlMnmbzR-c7_jYFpXy48MQyZgJPvNA-V6MRBsS3zQ_UTGNE"
+
+policies:
+  - orgId: 1
+    receiver: DiscordAlerts
