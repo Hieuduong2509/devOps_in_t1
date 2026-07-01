@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: hieuduong2509/my_node_api:latest
+        image: hieuduong2509/my-devops-api:latest
         ports:
         - containerPort: 3000
 ---
