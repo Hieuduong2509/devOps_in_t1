@@ -1,11 +1,12 @@
-  apiVersion: apps/v1
+---
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-api
   labels:
     app: node-api
 spec:
-  replicas: 2 # Chạy 2 bản sao API để chịu tải
+  replicas: 2
   selector:
     matchLabels:
       app: node-api
@@ -16,7 +17,7 @@ spec:
     spec:
       containers:
       - name: api
-        image: hieuduong2509/my_node_api:latest # Thay bằng tên image trên Docker Hub của bạn
+        image: hieuduong2509/my_node_api:latest
         ports:
         - containerPort: 3000
 ---
