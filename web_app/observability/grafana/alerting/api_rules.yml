@@ -1,0 +1,25 @@
+---
+apiVersion: 1
+
+groups:
+  - orgId: 1
+    name: "Cảnh báo quá tải API"
+    folder: "Alerts"
+    interval: 10s 
+    rules:
+      - uid: api_cpu_high
+        title: " BÁO ĐỘNG ĐỎ: API đang bị ép tải (CPU tăng vọt)!"
+        condition: A
+        for: 10s 
+        annotations:
+          summary: "Hệ thống đang chịu tải nặng, HPA chuẩn bị được kích hoạt."
+        labels:
+          severity: critical
+        data:
+          - refId: A
+            datasourceUid: prometheus
+            relativeTimeRange:
+              from: 60
+              to: 0
+            model:
+              expr: sum(rate(container_cpu_usage_seconds_total{name="my_node_api"}[1m])) * 100 > 60
