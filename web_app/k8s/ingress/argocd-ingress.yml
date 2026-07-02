@@ -2,9 +2,13 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-ingress
-  namespace: argocd  # Phải là argocd
+  namespace: argocd
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Cấu hình quan trọng cho gRPC của ArgoCD
+    traefik.ingress.kubernetes.io/router.middlewares: argocd-grpc-middleware@kubernetescrd 
+    # Nếu không muốn cấu hình phức tạp, hãy dùng cách đơn giản hóa dưới đây:
+    traefik.ingress.kubernetes.io/service.serversscheme: h2c 
 spec:
   ingressClassName: traefik
   rules:
@@ -15,6 +19,6 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: argocd-server # Tên Service lấy từ kết quả bạn vừa gửi
+            name: argocd-server
             port:
-              number: 80
+              number: 80 # ArgoCD Service thường map cổng 80 vào 8080
