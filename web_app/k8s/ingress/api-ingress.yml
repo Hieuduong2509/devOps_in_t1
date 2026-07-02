@@ -2,8 +2,9 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: all-ingress
+  namespace: observability  # <--- THÊM DÒNG NÀY VÀO
 spec:
-  ingressClassName: traefik  # Thay vì dùng annotation cũ
+  ingressClassName: traefik
   rules:
   - host: api.devoops.shop
     http:
@@ -12,7 +13,7 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: node-api-service
+            name: node-api-service # Đảm bảo node-api cũng được chuyển sang observability
             port:
               number: 80
   - host: grafana.devoops.shop
