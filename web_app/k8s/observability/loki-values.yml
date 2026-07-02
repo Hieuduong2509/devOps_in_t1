@@ -1,4 +1,16 @@
+# Cấu hình để chạy Loki ở chế độ Single Binary (không cần S3)
+deploymentMode: SingleBinary
+
 loki:
   auth_enabled: false
+  commonConfig:
+    replication_factor: 1
   storage:
     type: 'filesystem'
+
+backend:
+  replicas: 0
+read:
+  replicas: 0
+write:
+  replicas: 0
