@@ -17,7 +17,7 @@ export const options = {
 // 2. Hành động của từng người dùng ảo
 export default function () {
   // Gọi trực tiếp vào API của bạn
-  const res = http.get('http://50.19.98.81:30000');
+  const res = http.get('http://50.19.98.81:30001');
   
   // Kiểm tra mã phản hồi có phải 200 OK không
   check(res, {
