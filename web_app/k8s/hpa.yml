@@ -1,26 +1,19 @@
-apiVersion: apps/v1
-kind: Deployment
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
 metadata:
-  name: node-api
+  name: node-api-hpa
 spec:
-  replicas: 2
-  selector:
-    matchLabels:
-      app: node-api
-  template:
-    metadata:
-      labels:
-        app: node-api
-    spec:
-      containers:
-      - name: node-api
-        image: hieuduong2509/my_node_api:latest
-        ports:
-        - containerPort: 3000
-        resources:
-          requests:
-            cpu: "100m"     
-            memory: "128Mi"  
-          limits:
-            cpu: "500m"      
-            memory: "256Mi" 
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: node-api 
+  minReplicas: 4    
+  maxReplicas: 10   
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
