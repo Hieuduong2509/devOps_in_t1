@@ -2,18 +2,19 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: argocd-server-ingress
-  namespace: argocd
+  namespace: argocd  # Đảm bảo namespace này khớp với namespace cài ArgoCD
   annotations:
-    traefik.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    traefik.ingress.kubernetes.io/router.entrypoints: web
 spec:
+  ingressClassName: traefik
   rules:
-  - host: argocd.devoops.shop 
+  - host: argocd.devoops.shop
     http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: argocd-server
+            name: argocd-server # Tên Service của ArgoCD
             port:
-              number: 443
+              number: 80
