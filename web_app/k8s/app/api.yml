@@ -2,7 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-api
+  namespace: observability  # <--- Bắt buộc phải có
 spec:
+  replicas: 4
   selector:
     matchLabels:
       app: node-api
@@ -16,24 +18,17 @@ spec:
         image: hieuduong2509/my_node_api:latest
         ports:
         - containerPort: 3000
-        resources:
-          requests:
-            cpu: "100m"     
-            memory: "128Mi"  
-          limits:
-            cpu: "500m"      
-            memory: "256Mi"
-
 ---
+# Đảm bảo Service cũng nằm cùng namespace
 apiVersion: v1
 kind: Service
 metadata:
   name: node-api-service
+  namespace: observability  
 spec:
-  type: ClusterIP     
   selector:
-    app: node-api    
+    app: node-api
   ports:
     - protocol: TCP
-      port: 80         
+      port: 80
       targetPort: 3000
