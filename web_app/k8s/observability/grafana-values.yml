@@ -1,0 +1,11 @@
+adminPassword: admin
+
+datasources:
+  datasources.yaml:
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      url: http://my-prometheus-server.observability.svc.cluster.local:80
+      access: proxy
+      isDefault: true
