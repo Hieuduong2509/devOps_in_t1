@@ -8,7 +8,7 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: node-api 
-  minReplicas: 4    
+  minReplicas: 4    # Tối thiểu lúc nào cũng phải có 4 Pod chạy
   maxReplicas: 10   
   metrics:
   - type: Resource
