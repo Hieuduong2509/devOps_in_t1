@@ -4,14 +4,11 @@ metadata:
   name: argocd-server-ingress
   namespace: argocd
   annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    traefik.ingress.kubernetes.io/router.tls: "true"
+    traefik.ingress.kubernetes.io/router.entrypoints: web
+    # Quan trọng: Ép kiểu kết nối cho gRPC của ArgoCD
     traefik.ingress.kubernetes.io/service.serversscheme: h2c
 spec:
   ingressClassName: traefik
-  tls:
-  - hosts:
-    - argocd.devoops.shop
   rules:
   - host: argocd.devoops.shop
     http:
