@@ -16,17 +16,10 @@ spec:
       containers:
       - name: loki
         image: grafana/loki:latest
-        args: ["-config.file=/etc/loki/config.yaml"]
+        # Đổi lệnh khởi động để dùng cấu hình mặc định có sẵn trong image
+        args: ["-config.file=/etc/loki/local-config.yaml"]
         ports:
         - containerPort: 3100
-        volumeMounts:
-        - name: config
-          mountPath: /etc/loki/config.yaml
-          subPath: loki-values.yml
-      volumes:
-      - name: config
-        configMap:
-          name: loki-config
 ---
 apiVersion: v1
 kind: Service
