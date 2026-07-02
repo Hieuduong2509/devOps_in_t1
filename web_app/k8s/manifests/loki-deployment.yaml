@@ -19,6 +19,14 @@ spec:
         args: ["-config.file=/etc/loki/config.yaml"]
         ports:
         - containerPort: 3100
+        volumeMounts:
+        - name: config
+          mountPath: /etc/loki/config.yaml
+          subPath: loki-values.yml
+      volumes:
+      - name: config
+        configMap:
+          name: loki-config
 ---
 apiVersion: v1
 kind: Service
