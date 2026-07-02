@@ -1,12 +1,12 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: api-ingress
+  name: all-ingress
   annotations:
     kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: devoops.shop
+  - host: api.devoops.shop
     http:
       paths:
       - path: /
@@ -14,5 +14,15 @@ spec:
         backend:
           service:
             name: node-api-service
+            port:
+              number: 80
+  - host: grafana.devoops.shop
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-grafana
             port:
               number: 80
