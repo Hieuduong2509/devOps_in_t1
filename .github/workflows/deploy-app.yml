@@ -103,14 +103,4 @@
             push: true
             tags: ${{ secrets.DOCKERHUB_USERNAME }}/fastapi-app:latest
 
-        - name: Deploy to K3s (Instance 2)
-          uses: appleboy/ssh-action@v1.0.3
-          with:
-            host: ${{ secrets.INSTANCE2_IP }}
-            username: ubuntu
-            key: ${{ secrets.SSH_PRIVATE_KEY_INSTANCE2 }}
-            script: |
-              cd ~/devOps_in_t1/web_app
-              git pull origin main
-              sudo kubectl apply -f api-deploy.yaml
-              sudo kubectl rollout restart deployment fastapi-deployment
+        
