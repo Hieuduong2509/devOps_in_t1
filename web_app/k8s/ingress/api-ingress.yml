@@ -2,10 +2,11 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: api-ingress
-  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: traefik
 spec:
   rules:
-  - host: api.devoops.shop     
+  - host: devoops.shop
     http:
       paths:
       - path: /
@@ -14,4 +15,4 @@ spec:
           service:
             name: node-api-service
             port:
-              number: 80      
+              number: 80
