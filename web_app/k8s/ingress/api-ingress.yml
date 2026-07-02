@@ -2,9 +2,8 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: all-ingress
-  annotations:
-    kubernetes.io/ingress.class: traefik
 spec:
+  ingressClassName: traefik  # Thay vì dùng annotation cũ
   rules:
   - host: api.devoops.shop
     http:
