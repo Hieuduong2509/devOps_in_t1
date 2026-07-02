@@ -2,18 +2,20 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: all-ingress
-  namespace: observability  # <--- THÊM DÒNG NÀY VÀO
+  namespace: observability
+  annotations:
+    traefik.ingress.kubernetes.io/router.middlewares: observability-strip-prefix@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
   - host: api.devoops.shop
     http:
       paths:
-      - path: /
+      - path: /api 
         pathType: Prefix
         backend:
           service:
-            name: node-api-service # Đảm bảo node-api cũng được chuyển sang observability
+            name: node-api-service
             port:
               number: 80
   - host: grafana.devoops.shop
