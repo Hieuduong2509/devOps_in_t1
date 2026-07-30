@@ -19,7 +19,7 @@ metadata:
   namespace: default
 spec:
   serviceName: "postgres-primary"
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: postgres-primary
@@ -91,7 +91,7 @@ metadata:
   namespace: default
 spec:
   serviceName: "postgres-replica"
-  replicas: 1
+  replicas: 5
   selector:
     matchLabels:
       app: postgres-replica
