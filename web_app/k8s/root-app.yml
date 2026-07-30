@@ -9,6 +9,6 @@ spec:
     server: https://kubernetes.default.svc
     namespace: argocd
   source:
-    path: web_app/k8s/apps 
+    path: web_app/k8s/menifests
     repoURL: https://github.com/Hieuduong2509/devOps_in_t1.git
     targetRevision: main
