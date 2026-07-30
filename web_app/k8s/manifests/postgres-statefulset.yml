@@ -1,0 +1,141 @@
+# 1. PRIMARY NODE (StatefulSet & Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-primary
+  namespace: default
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres-primary
+  clusterIP: None 
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-primary
+  namespace: default
+spec:
+  serviceName: "postgres-primary"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-primary
+  template:
+    metadata:
+      labels:
+        app: postgres-primary
+    spec:
+      containers:
+        - name: postgres
+          image: bitnamilegacy/postgresql:16
+          env:
+            - name: POSTGRESQL_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: POSTGRESQL_USERNAME
+              value: "myuser"
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: myuser-password
+            - name: POSTGRESQL_DATABASE
+              value: "kamimind_db"
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: "master"
+            - name: POSTGRESQL_REPLICATION_USER
+              value: "replicator"
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: repl-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: pg-primary-data
+              mountPath: /bitnami/postgresql
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-primary-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 2Gi
+
+---
+# 2. REPLICA NODE (StatefulSet & Service)
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres-replica
+  namespace: default
+spec:
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres-replica
+  clusterIP: None
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres-replica
+  namespace: default
+spec:
+  serviceName: "postgres-replica"
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres-replica
+  template:
+    metadata:
+      labels:
+        app: postgres-replica
+    spec:
+      containers:
+        - name: postgres
+          image: bitnamilegacy/postgresql:16
+          env:
+            - name: POSTGRESQL_USERNAME
+              value: "myuser"
+            - name: POSTGRESQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: myuser-password
+            - name: POSTGRESQL_DATABASE
+              value: "kamimind_db"
+            - name: POSTGRESQL_REPLICATION_MODE
+              value: "slave"
+            - name: POSTGRESQL_MASTER_HOST
+              value: "postgres-primary-0.postgres-primary"
+            - name: POSTGRESQL_MASTER_PORT_NUMBER
+              value: "5432"
+            - name: POSTGRESQL_REPLICATION_USER
+              value: "replicator"
+            - name: POSTGRESQL_REPLICATION_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: repl-password
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - name: pg-replica-data
+              mountPath: /bitnami/postgresql
+  volumeClaimTemplates:
+    - metadata:
+        name: pg-replica-data
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 2Gi

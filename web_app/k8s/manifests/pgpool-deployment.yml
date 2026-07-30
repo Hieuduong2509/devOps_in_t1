@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pgpool-svc
+  namespace: default
+spec:
+  ports:
+    - port: 9999
+      targetPort: 9999
+  selector:
+    app: pgpool
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pgpool
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgpool
+  template:
+    metadata:
+      labels:
+        app: pgpool
+    spec:
+      containers:
+        - name: pgpool
+          image: bitnamilegacy/pgpool:4.5.3-debian-12-r0
+          envFrom:
+            - configMapRef:
+                name: pgpool-config
+          env:
+            - name: PGPOOL_ADMIN_USERNAME
+              value: "admin"
+            - name: PGPOOL_ADMIN_PASSWORD
+              value: "admin123"
+            - name: PGPOOL_POSTGRES_USERNAME
+              value: "postgres"
+            - name: PGPOOL_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: postgres-password
+            - name: PGPOOL_SR_CHECK_USER
+              value: "replicator"
+            - name: PGPOOL_SR_CHECK_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: repl-password
+            - name: PGPOOL_POSTGRES_CUSTOM_PASSWORDS
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: myuser-password
+          ports:
+            - containerPort: 9999

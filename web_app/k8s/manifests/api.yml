@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: node-api
-  namespace: observability  # <--- Bắt buộc phải có
+  namespace: observability  
 spec:
   replicas: 4
   selector:
@@ -18,6 +18,9 @@ spec:
         image: hieuduong2509/my_node_api:latest
         ports:
         - containerPort: 3000
+env:
+    - name: DATABASE_URL
+      value: "postgresql://myuser:myuser_password@pgpool-svc:9999/kamimind_db"
 ---
 # Đảm bảo Service cũng nằm cùng namespace
 apiVersion: v1

@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: default
+type: Opaque
+stringData:
+  postgres-password: "admin123"
+  myuser-password: "myuser_password"
+  repl-password: "replicator_password"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: pgpool-config
+  namespace: default
+data:
+  PGPOOL_BACKEND_NODES: "0:postgres-primary-0.postgres-primary:5432,1:postgres-replica-0.postgres-replica:5432"
+  PGPOOL_ENABLE_LOAD_BALANCING: "yes"
+  PGPOOL_LOAD_BALANCE_MODE: "yes"
+  PGPOOL_BACKEND_WEIGHTS: "0:1"
+  PGPOOL_POSTGRES_CUSTOM_USERS: "myuser"
